@@ -22,14 +22,21 @@ public:
     ~MainWindow();
 
     void getCheckSum();
+    void formatting();
+    bool savetoFile = false;
+
 
 private slots:
     void on_pushButton_clicked();
+
+    void on_pushButton_2_clicked();
 
 private:
     Ui::MainWindow *ui;
     QByteArray sig;
     QString buffer;
+
+
 };
 
 #endif // MAINWINDOW_H

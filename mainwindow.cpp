@@ -29,10 +29,9 @@ void MainWindow::getCheckSum()
        //Create sentry file
 
        QFile sentry("sentry.dat");
-       if(!sentry.exists())
+
        sentry.open(QIODevice::WriteOnly | QIODevice::Text);
        QTextStream out(&sentry);
-
 
 
        QDirIterator iterator(dir.absolutePath(), QDirIterator::Subdirectories);
@@ -46,8 +45,11 @@ void MainWindow::getCheckSum()
                if ( file.open( QIODevice::ReadOnly ) ) {
                    hash.addData( file.readAll() );
                    sig = hash.result();
+
+                   if(!savetoFile)
                    ui->textBrowser->append(QFileInfo(file).fileName() + ": " + QString(sig.toHex()));
 
+                   if(savetoFile)
                    out << QFileInfo(file).fileName() + " : " + QString(sig.toHex()) << endl;
 
                } else {
@@ -56,6 +58,7 @@ void MainWindow::getCheckSum()
        }
 
 
+        savetoFile = false;
 
 }
 
@@ -111,10 +114,13 @@ void MainWindow::on_pushButton_clicked()
 
 
 
-                if(sig.toHex()== match)
-                    ui->textBrowser->append(QFileInfo(file).fileName() + " MATCH!");
+                if(sig.toHex()== match){
+
+                    ui->textBrowser->append(QFileInfo(file).fileName() + " PASS!");
+
+                   }
                 else
-                    ui->textBrowser->append(QFileInfo(file).fileName() + " NO MATCH!");
+                    ui->textBrowser->append(QFileInfo(file).fileName() + " FAIL!");
 
 
 
@@ -128,36 +134,10 @@ void MainWindow::on_pushButton_clicked()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-    QFile file("test.txt");
-
-    if ( file.open( QIODevice::ReadOnly ) ) {
-        hash.addData( file.readAll() );
-    } else {
-        // Handle "cannot open file" error
-    }
-
-    // Retrieve the SHA1 signature of the file
-    if(sig == hash.result())
-        ui->textBrowser->setText("MATCH");
-        //qDebug() << "MATCH" << endl;
-    else
-        ui->textBrowser->setText("FILE HAS BEEN ALTERED");
-        //qDebug() << "NO MATCH" << endl;
-        */
-
+void MainWindow::on_pushButton_2_clicked()
+{
+    savetoFile = true;
+    getCheckSum();
+    ui->statusBar->show();
+    ui->statusBar->showMessage("Saved to sentry.dat!", 10);
+}

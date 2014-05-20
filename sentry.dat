@@ -1,0 +1,8 @@
+ui_mainwindow.h : 06b9cbd3032722a09383494a3542247d3a1caebb
+mainwindow.ui : c9d800af43b315a9aea6ae67da0c0924376ba2f6
+PenguSniff.pro.user : c13c4a8cb00cc1d616db48ed6c37e5fec69bbead
+PenguSniff : 674f6711c36db8f36fd78578dfe99c32faa78193
+Makefile : 9c040727bce21eb784a5a8907212511897b877f1
+moc_mainwindow.o : a263cf27ef25ea7c36149b9cb35b07ef932e519b
+test.txt : 7e92efa3ff81a27bd43bd2e1af6c6a291d693836
+mainwindow.cpp : 8866006717aad7769a0e06ee7555169ba8342eb8
