@@ -83,7 +83,7 @@ void MainWindow::on_saveButton_clicked()
           else
           {
               out << QCryptographicHash::hash(hashFile.readAll(), QCryptographicHash::Md5).toHex()
-                  << " : " << dirIt.fileName() << "\n";
+                  << " : " << hashFile.fileName()/*dirIt.fileName()*/ << "\n";
           }
           out.flush(); //Force output to show up immediately
       }
@@ -140,12 +140,12 @@ void MainWindow::on_checkButton_clicked()
           else
           {
               numFiles++;
-              fileBuffer.append(QFileInfo(hashFile).fileName());
+              fileBuffer.append(hashFile.fileName()/*QFileInfo(hashFile).fileName()*/);
 
-             placeholder = buffer.indexOf(QFileInfo(hashFile).fileName(), placeholder);     //parse buffer for filenames and hash
+             placeholder = buffer.indexOf(hashFile.fileName()/*QFileInfo(hashFile).fileName()*/, placeholder);     //parse buffer for filenames and hash
              position = placeholder - 35;                                                   //MD5 hashes are 32 characters in length
              match = buffer.mid(position, 32 );
-             placeholder += QFileInfo(hashFile).fileName().length();
+             placeholder += hashFile.fileName().length(); //QFileInfo(hashFile).fileName().length();
 
             hash = QCryptographicHash::hash(hashFile.readAll(), QCryptographicHash::Md5).toHex();
 
@@ -173,7 +173,7 @@ void MainWindow::on_checkButton_clicked()
                     QString s;
                     QTextStream ss(&s);
 
-                ss << left << qSetFieldWidth(50) << QFileInfo(hashFile).fileName() << "FAIL" << qSetFieldWidth(0) << endl;
+                ss << left << qSetFieldWidth(50) << hashFile.fileName()/*QFileInfo(hashFile).fileName()*/ << "FAIL" << qSetFieldWidth(0) << endl;
                 test.prepend((s));
             }
           }
