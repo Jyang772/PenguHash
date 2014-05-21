@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 
+#include <QRegExp>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -30,6 +31,7 @@ void MainWindow::getCheckSum()
 
        QFile sentry("sentry.dat");
 
+       if(!sentry.exists() || savetoFile)
        sentry.open(QIODevice::WriteOnly | QIODevice::Text);
        QTextStream out(&sentry);
 
@@ -42,6 +44,8 @@ void MainWindow::getCheckSum()
 
               QFile file(iterator.next());
 
+              qDebug() << QFileInfo(file).fileName() << endl;
+
                if ( file.open( QIODevice::ReadOnly ) ) {
                    hash.addData( file.readAll() );
                    sig = hash.result();
@@ -50,7 +54,7 @@ void MainWindow::getCheckSum()
                    ui->textBrowser->append(QFileInfo(file).fileName() + ": " + QString(sig.toHex()));
 
                    if(savetoFile)
-                   out << QFileInfo(file).fileName() + " : " + QString(sig.toHex()) << endl;
+                   out << QFileInfo(file).fileName() + " : " + QString(sig.toHex()) + " " << endl;
 
                } else {
                    qDebug() << "Can't open " << QFileInfo(file).fileName() << endl;
@@ -68,7 +72,8 @@ void MainWindow::on_pushButton_clicked()
 
     ui->textBrowser->clear();
     int counter = 0;
-    int placeholder;
+    int placeholder = 0;
+    int position = 0;
     QString match;
 
     //Open sentry.dat to check
@@ -105,8 +110,13 @@ void MainWindow::on_pushButton_clicked()
                 hash.addData( file.readAll() );
                 sig = hash.result();
 
-                qDebug() << buffer.indexOf(QFileInfo(file).fileName()) << endl;
-                placeholder = buffer.indexOf(QFileInfo(file).fileName());
+
+
+
+
+                qDebug() << buffer.indexOf(QFileInfo(file).fileName(), position) << endl;
+                placeholder = buffer.indexOf(QFileInfo(file).fileName(), position);
+                position = placeholder + QFileInfo(file).fileName().length();
                 qDebug() << "FileName: " << QFileInfo(file).fileName() << endl;
                 qDebug() << "HASH: " << buffer.mid(placeholder + QFileInfo(file).fileName().length() + 3,40) << endl;
                 qDebug() << "HASH2: " << sig.toHex() << endl;
