@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 
 
-#include <QRegExp>
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -22,132 +22,148 @@ MainWindow::~MainWindow()
 void MainWindow::getCheckSum()
 {
 
+    QByteArray result;
+    QTextStream out(&result);
 
-       int counter = 0;
-       QDir dir = QDir::currentPath();
-       QCryptographicHash hash( QCryptographicHash::Sha1);
+    QDir dir = QDir::currentPath();
+    QDirIterator dirIt(dir.absolutePath(), QDir::Files, QDirIterator::Subdirectories);
+      while(dirIt.hasNext())
+      {
+          dirIt.next();
+          QFile hashFile(dirIt.filePath());
+          if(!hashFile.open(QFile::ReadOnly))
+          {
+              out << "File Error: '" << hashFile.errorString()
+                  << "' for file " << dirIt.fileName() << "\n";
+          }
+          else
+          {
+              out << QCryptographicHash::hash(hashFile.readAll(), QCryptographicHash::Md5).toHex()
+                  << " : " << dirIt.fileName() << "\n";
+          }
+          out.flush(); //Force output to show up immediately
+      }
 
-       //Create sentry file
-
-       QFile sentry("sentry.dat");
-
-       if(!sentry.exists() || savetoFile)
-       sentry.open(QIODevice::WriteOnly | QIODevice::Text);
-       QTextStream out(&sentry);
-
-
-       QDirIterator iterator(dir.absolutePath(), QDirIterator::Subdirectories);
-       while (iterator.hasNext()) {
-          iterator.next();
-
-          counter++;
-
-              QFile file(iterator.next());
-
-              qDebug() << QFileInfo(file).fileName() << endl;
-
-               if ( file.open( QIODevice::ReadOnly ) ) {
-                   hash.addData( file.readAll() );
-                   sig = hash.result();
-
-                   if(!savetoFile)
-                   ui->textBrowser->append(QFileInfo(file).fileName() + ": " + QString(sig.toHex()));
-
-                   if(savetoFile)
-                   out << QFileInfo(file).fileName() + " : " + QString(sig.toHex()) + " " << endl;
-
-               } else {
-                   qDebug() << "Can't open " << QFileInfo(file).fileName() << endl;
-               }
-       }
+      ui->textBrowser->setText(QString(result));
 
 
         savetoFile = false;
 
 }
 
-void MainWindow::on_pushButton_clicked()
-{
-   // getCheckSum();
 
-    ui->textBrowser->clear();
-    int counter = 0;
-    int placeholder = 0;
-    int position = 0;
-    QString match;
-
-    //Open sentry.dat to check
-
-    QFile sentry("sentry.dat");
-    if(sentry.open(QIODevice::ReadOnly))
-    {
-        QTextStream in(&sentry);
-        while(!in.atEnd())
-        {
-            buffer += in.readLine();
-            counter++;
-        }
-
-        sentry.close();
-    }
-
-    qDebug() << buffer << endl;
-    qDebug() << "Files: " << counter << endl;
-
-
-
-    QCryptographicHash hash( QCryptographicHash::Sha1);
-    QDir dir = QDir::currentPath();
-    QDirIterator iterator(dir.absolutePath(), QDirIterator::Subdirectories);
-    while (iterator.hasNext()) {
-       iterator.next();
-
-       counter++;
-
-           QFile file(iterator.next());
-
-            if ( file.open( QIODevice::ReadOnly ) ) {
-                hash.addData( file.readAll() );
-                sig = hash.result();
-
-
-
-
-
-                qDebug() << buffer.indexOf(QFileInfo(file).fileName(), position) << endl;
-                placeholder = buffer.indexOf(QFileInfo(file).fileName(), position);
-                position = placeholder + QFileInfo(file).fileName().length();
-                qDebug() << "FileName: " << QFileInfo(file).fileName() << endl;
-                qDebug() << "HASH: " << buffer.mid(placeholder + QFileInfo(file).fileName().length() + 3,40) << endl;
-                qDebug() << "HASH2: " << sig.toHex() << endl;
-                match = buffer.mid(placeholder + QFileInfo(file).fileName().length() + 3,40);
-
-
-
-                if(sig.toHex()== match){
-
-                    ui->textBrowser->append(QFileInfo(file).fileName() + " PASS!");
-
-                   }
-                else
-                    ui->textBrowser->append(QFileInfo(file).fileName() + " FAIL!");
-
-
-
-
-
-            } else {
-            }
-    }
-
-}
-
-
-
-void MainWindow::on_pushButton_2_clicked()
+void MainWindow::on_saveButton_clicked()
 {
     savetoFile = true;
-    getCheckSum();
+
+
+    QFile file("sentry.dat");
+
+
+    QTextStream out(&file);
+    file.open(QIODevice::WriteOnly);
+    QDir dir = QDir::currentPath();
+    QDirIterator dirIt(dir.absolutePath(), QDir::Files, QDirIterator::Subdirectories);
+      while(dirIt.hasNext())
+      {
+          dirIt.next();
+          QFile hashFile(dirIt.filePath());
+          if(!hashFile.open(QFile::ReadOnly))
+          {
+              out << "File Error: '" << hashFile.errorString()
+                  << "' for file " << dirIt.fileName() << "\n";
+          }
+          else
+          {
+              out << QCryptographicHash::hash(hashFile.readAll(), QCryptographicHash::Md5).toHex()
+                  << " : " << dirIt.fileName() << "\n";
+          }
+          out.flush(); //Force output to show up immediately
+      }
+
+
     ui->statusBar->show();
-    ui->statusBar->showMessage("Saved to sentry.dat!", 10);
+    ui->statusBar->showMessage("Saved to sentry.dat!", 1000);
+
 }
+
+void MainWindow::on_checkButton_clicked()
+{
+
+    QString buffer;
+    QString match;
+    QByteArray result;
+    QString test;
+    QString hash;
+    int placeholder = 0;
+    int position = 0;
+
+    ui->textBrowser->clear();
+
+    QFile sentry("sentry.dat");
+       if(sentry.open(QIODevice::ReadOnly))
+       {
+           QTextStream in(&sentry);
+           while(!in.atEnd())
+           {
+               buffer += in.readLine();
+           }
+
+           sentry.close();
+       }
+
+       qDebug() << "Buffer: " << buffer << endl;
+
+
+    QTextStream out(result);
+
+    QDir dir = QDir::currentPath();
+    QDirIterator dirIt(dir.absolutePath(), QDir::Files, QDirIterator::Subdirectories);
+      while(dirIt.hasNext())
+      {
+          dirIt.next();
+          QFile hashFile(dirIt.filePath());
+          if(!hashFile.open(QFile::ReadOnly))
+          {
+              out << "File Error: '" << hashFile.errorString()
+                  << "' for file " << dirIt.fileName() << "\n";
+          }
+          else
+          {
+
+             placeholder = buffer.indexOf(QFileInfo(hashFile).fileName(), placeholder);
+            // position = placeholder + QFileInfo(hashFile).fileName().length();
+             position = placeholder - 35;
+             match = buffer.mid(position, 32 );
+             placeholder += QFileInfo(hashFile).fileName().length();
+
+            hash = QCryptographicHash::hash(hashFile.readAll(), QCryptographicHash::Md5).toHex();
+
+
+
+
+            if(hash == match){
+                test.append(QFileInfo(hashFile).fileName() + " PASS!" + "\n");
+            //out << QFileInfo(hashFile).fileName() + " PASS!" << endl;
+                 // ui->textBrowser->append(QFileInfo(hashFile).fileName() + " PASS!");
+            }
+
+            else{
+                test.prepend(QFileInfo(hashFile).fileName() + " FAIL!" + "\n");
+
+                  //out << QFileInfo(hashFile).fileName() + " FAIL!" << endl;
+               // ui->textBrowser->append(QFileInfo(hashFile).fileName() + " FAIL!");
+            }
+          }
+
+      }
+
+
+      ui->textBrowser->setText(test);
+
+
+}
+
+
+
+

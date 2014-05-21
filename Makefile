@@ -713,7 +713,8 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		/usr/include/qt5/QtCore/qfileinfo.h \
 		/usr/include/qt5/QtCore/QDirIterator \
 		/usr/include/qt5/QtCore/qdiriterator.h \
-		ui_mainwindow.h
+		ui_mainwindow.h \
+		/usr/include/qt5/QtCore/QRegExp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
