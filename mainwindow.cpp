@@ -207,7 +207,8 @@ for(int i=0; i<buffer.length(); i++){
 }
 
 
-    qDebug() << "filenames: " <<  sentryBuffer.toList() << endl;
+    qDebug() << "sentryBuffer: " <<  sentryBuffer.toList() << endl;
+    qDebug() << "fileNames: " << fileBuffer.toList() << endl;
     qDebug() << numFiles << endl;
     qDebug() << buffer << endl;
     qDebug() << sentryBuffer.size() << endl;
@@ -216,8 +217,10 @@ for(int i=0; i<buffer.length(); i++){
        if(fileBuffer.indexOf(sentryBuffer.at(i)) == -1)
        {
            ss << left << qSetFieldWidth(50) << sentryBuffer.at(i) << "MISSING" << qSetFieldWidth(0) << endl;
-           test.prepend(s);
+           //test.prepend(s);
         }
+
+      test.prepend(s);
 
       ui->textBrowser->setText(test);
 
