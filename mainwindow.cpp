@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <QAbstractItemView>
 
 
 
@@ -9,6 +10,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->textBrowser->setFont(QFont("Monospace",11));
+    ui->textBrowser->setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy(QAbstractItemView::ScrollPerPixel));
     getCheckSum();
 }
 
@@ -40,11 +43,16 @@ void MainWindow::getCheckSum()
           {
               out << QCryptographicHash::hash(hashFile.readAll(), QCryptographicHash::Md5).toHex()
                   << " : " << dirIt.fileName() << "\n";
+
+
+              qDebug() << "Filename: " << QFileInfo(hashFile).fileName() << endl;
+              qDebug() << "Hash: " << QCryptographicHash::hash(hashFile.readAll(), QCryptographicHash::Md5).toHex() << endl;
           }
           out.flush(); //Force output to show up immediately
       }
 
       ui->textBrowser->setText(QString(result));
+
 
 
         savetoFile = false;
@@ -143,13 +151,34 @@ void MainWindow::on_checkButton_clicked()
 
 
             if(hash == match){
-                test.append(QFileInfo(hashFile).fileName() + " PASS!" + "\n");
+               // test.append(QFileInfo(hashFile).fileName() + " PASS" + "\n");
+
+
+                    QString s;
+                    QTextStream ss(&s);
+                    ss << left << qSetFieldWidth(50) << QFileInfo(hashFile).fileName() << "PASS" << qSetFieldWidth(0) << endl;
+                    //ss << qSetFieldWidth(40) << "One" << "One" << qSetFieldWidth(0) << endl;
+                    test.append(qPrintable(s));
             //out << QFileInfo(hashFile).fileName() + " PASS!" << endl;
                  // ui->textBrowser->append(QFileInfo(hashFile).fileName() + " PASS!");
             }
 
+            else if(QFileInfo(hashFile).fileName() == sentry.fileName())
+            {
+                    QString s;
+                    QTextStream ss(&s);
+                    ss << left << qSetFieldWidth(50) << QFileInfo(hashFile).fileName() << "SENTRY" << qSetFieldWidth(0) << endl;
+                    //ss << qSetFieldWidth(40) << "One" << "One" << qSetFieldWidth(0) << endl;
+                    test.prepend(qPrintable(s));
+            }
+
             else{
-                test.prepend(QFileInfo(hashFile).fileName() + " FAIL!" + "\n");
+                //test.prepend(QFileInfo(hashFile).fileName() + " FAIL" + "\n");
+
+                QString s;
+                    QTextStream ss(&s);
+                ss << left << qSetFieldWidth(50) << QFileInfo(hashFile).fileName() << "FAIL" << qSetFieldWidth(0) << endl;
+                test.prepend((s));
 
                   //out << QFileInfo(hashFile).fileName() + " FAIL!" << endl;
                // ui->textBrowser->append(QFileInfo(hashFile).fileName() + " FAIL!");
