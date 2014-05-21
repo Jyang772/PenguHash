@@ -37,7 +37,7 @@ private:
     Ui::MainWindow *ui;
     QByteArray sig;
     QString buffer;
-
+    int numFiles;
 
 };
 
