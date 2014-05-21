@@ -25,6 +25,8 @@ public:
     void formatting();
     bool savetoFile = false;
 
+    int numFiles = 0;
+
 
 private slots:
 
@@ -33,11 +35,12 @@ private slots:
 
     void on_checkButton_clicked();
 
+    void on_pushButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     QByteArray sig;
     QString buffer;
-    int numFiles;
 
 };
 

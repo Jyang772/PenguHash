@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->textBrowser->setFont(QFont("Monospace",11));
     ui->textBrowser->setLineWrapMode(QTextEdit::NoWrap);
-    getCheckSum();
+   // getCheckSum();
 }
 
 MainWindow::~MainWindow()
@@ -98,6 +98,7 @@ void MainWindow::on_checkButton_clicked()
 {
 
     QString buffer;
+    QVector<QString> fileBuffer;
     QString match;
     QByteArray result;
     QString test;
@@ -113,13 +114,13 @@ void MainWindow::on_checkButton_clicked()
            QTextStream in(&sentry);
            while(!in.atEnd())
            {
-               buffer += in.readLine();
+               buffer += in.readLine() + "\n";
            }
 
            sentry.close();
        }
 
-       qDebug() << "Buffer: " << buffer << endl;
+       //qDebug() << "Buffer: " << buffer << endl;
 
 
     QTextStream out(result);
@@ -128,6 +129,7 @@ void MainWindow::on_checkButton_clicked()
     QDirIterator dirIt(dir.absolutePath(), QDir::Files, QDirIterator::Subdirectories);
       while(dirIt.hasNext())
       {
+
           dirIt.next();
           QFile hashFile(dirIt.filePath());
           if(!hashFile.open(QFile::ReadOnly))
@@ -137,10 +139,11 @@ void MainWindow::on_checkButton_clicked()
           }
           else
           {
+              numFiles++;
+              fileBuffer.append(QFileInfo(hashFile).fileName());
 
-             placeholder = buffer.indexOf(QFileInfo(hashFile).fileName(), placeholder);
-             //Check for missing/deleted files
-             position = placeholder - 35;
+             placeholder = buffer.indexOf(QFileInfo(hashFile).fileName(), placeholder);     //parse buffer for filenames and hash
+             position = placeholder - 35;                                                   //MD5 hashes are 32 characters in length
              match = buffer.mid(position, 32 );
              placeholder += QFileInfo(hashFile).fileName().length();
 
@@ -174,13 +177,47 @@ void MainWindow::on_checkButton_clicked()
                 test.prepend((s));
             }
           }
-          /*
-          for(int i=0; i<)
-          QFile Check(name);
-*/
+
 
       }
 
+
+// This should probably go in a separate function //
+
+    int parse = 0;
+    int parsepos = 0;
+    QVector<QString> sentryBuffer;
+    QString substring;
+
+    QString s;
+    QTextStream ss(&s);
+
+
+for(int i=0; i<buffer.length(); i++){
+
+        parsepos = buffer.indexOf(":",parse);
+        if(parsepos == -1)
+            continue;
+        parse = buffer.indexOf("\n",parsepos+1);
+        qDebug() << "parsepos" << parsepos << endl;
+        qDebug() << "parse" << parse << endl;
+        substring = buffer.mid(parsepos+2, parse-parsepos-2); //plus two for space
+        sentryBuffer.append(substring);
+        qDebug() << substring << endl;
+}
+
+
+    qDebug() << "filenames: " <<  sentryBuffer.toList() << endl;
+    qDebug() << numFiles << endl;
+    qDebug() << buffer << endl;
+    qDebug() << sentryBuffer.size() << endl;
+
+    for(int i=0; i<sentryBuffer.size(); i++)
+       if(fileBuffer.indexOf(sentryBuffer.at(i)) == -1)
+       {
+           ss << left << qSetFieldWidth(50) << sentryBuffer.at(i) << "MISSING" << qSetFieldWidth(0) << endl;
+           test.prepend(s);
+        }
 
       ui->textBrowser->setText(test);
 
@@ -190,3 +227,8 @@ void MainWindow::on_checkButton_clicked()
 
 
 
+
+void MainWindow::on_pushButton_clicked()
+{
+    getCheckSum();
+}
