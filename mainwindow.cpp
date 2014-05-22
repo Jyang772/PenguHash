@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include <QTextEdit>
+#include <QMessageBox>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -228,4 +229,13 @@ for(int i=0; i<buffer.length(); i++){
 void MainWindow::on_pushButton_clicked()
 {
     getCheckSum();
+}
+
+void MainWindow::on_actionAbout_triggered()
+{
+    QMessageBox::about(this, tr("About PenguSniff"),
+                       tr("<h2>PenguSniff v1.0.0</h2>"
+                          "<p>Copyright &copy; 2014 MicroPenguin"
+                          "<p>PenguSniff is a simple file integrity monitor/scanner."));
+
 }
