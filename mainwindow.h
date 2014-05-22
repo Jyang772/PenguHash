@@ -22,10 +22,7 @@ public:
     ~MainWindow();
 
     void getCheckSum();
-    void formatting();
-    bool savetoFile = false;
 
-    int numFiles = 0;
 
 
 private slots:

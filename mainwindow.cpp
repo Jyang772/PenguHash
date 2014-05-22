@@ -25,6 +25,7 @@ void MainWindow::getCheckSum()
 {
 
     QByteArray result;
+    QString hash;
     QTextStream out(&result);
 
     QDir dir = QDir::currentPath();
@@ -40,31 +41,26 @@ void MainWindow::getCheckSum()
           }
           else
           {
-              out << QCryptographicHash::hash(hashFile.readAll(), QCryptographicHash::Md5).toHex()
-                  << " : " << dirIt.fileName() << "\n";
+              hash = QCryptographicHash::hash(hashFile.readAll(), QCryptographicHash::Md5).toHex();
+              out << hash << " : " << dirIt.fileName() << "\n";
 
 
               qDebug() << "Filename: " << QFileInfo(hashFile).fileName() << endl;
-              qDebug() << "Hash: " << QCryptographicHash::hash(hashFile.readAll(), QCryptographicHash::Md5).toHex() << endl;
+              qDebug() << "Hash: " << hash << endl;
           }
           out.flush(); //Force output to show up immediately
       }
 
       ui->textBrowser->setText(QString(result));
-
-
-
-        savetoFile = false;
-
 }
 
 
 void MainWindow::on_saveButton_clicked()
 {
-    savetoFile = true;
 
 
     QFile file("sentry.dat");
+
 
 
     QTextStream out(&file);
@@ -139,7 +135,6 @@ void MainWindow::on_checkButton_clicked()
           }
           else
           {
-              numFiles++;
               fileBuffer.append(hashFile.fileName()/*QFileInfo(hashFile).fileName()*/);
 
              placeholder = buffer.indexOf(hashFile.fileName()/*QFileInfo(hashFile).fileName()*/, placeholder);     //parse buffer for filenames and hash
@@ -209,7 +204,6 @@ for(int i=0; i<buffer.length(); i++){
 
     qDebug() << "sentryBuffer: " <<  sentryBuffer.toList() << endl;
     qDebug() << "fileNames: " << fileBuffer.toList() << endl;
-    qDebug() << numFiles << endl;
     qDebug() << buffer << endl;
     qDebug() << sentryBuffer.size() << endl;
 
