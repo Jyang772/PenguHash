@@ -8,7 +8,7 @@ before_script:
   - sudo apt-get update
   - sudo apt-get install libqt4-dev qt4-qmake
 script:
-  - qmake -project "QT += widgets QT += core gui"
+  - qmake -project "QT += widgets"
   - qmake PenguSniff.pro
   - make
 branches:
