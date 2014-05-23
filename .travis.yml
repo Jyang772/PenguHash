@@ -5,7 +5,8 @@ before_install:
   - echo $LANG
   - echo $LC_ALL
 before_script:
-
+  - sudo apt-get update
+  - sudo apt-get install qt5-qmake
 script: "make"
 branches:
   only:

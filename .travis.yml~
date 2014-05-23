@@ -5,8 +5,7 @@ before_install:
   - echo $LANG
   - echo $LC_ALL
 before_script:
-  - travis_retry bundle
-  - travis_retry ./configure
+
 script: "make"
 branches:
   only:
