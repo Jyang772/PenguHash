@@ -4,23 +4,18 @@ compiler:
 before_install:
   - echo $LANG
   - echo $LC_ALL
-  - rvm use $RVM --install --binary --fuzzy
 before_script:
   - travis_retry bundle
   - travis_retry ./configure
-script: rake
 branches:
   only:
     - master
-    - 1.8.7
 notifications:
   recipients:
     - justin@micropenguin.net
   email:
     on_success: change
     on_failure: always
-
-
 
     template:
       - "%{repository}/%{branch} (%{commit} - %{author}): %{message}"
