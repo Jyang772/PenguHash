@@ -146,8 +146,6 @@ void MainWindow::on_checkButton_clicked()
             hash = QCryptographicHash::hash(hashFile.readAll(), QCryptographicHash::Md5).toHex();
 
 
-
-
             if(hash == match){
 
                     QString s;
@@ -177,6 +175,7 @@ void MainWindow::on_checkButton_clicked()
 
       }
 
+      qDebug() << buffer << endl;
 
 // This should probably go in a separate function //
 
@@ -190,7 +189,6 @@ void MainWindow::on_checkButton_clicked()
 
 
 for(int i=0; i<buffer.length(); i++){
-
         parsepos = buffer.indexOf(":",parse);
         if(parsepos == -1)
             continue;
