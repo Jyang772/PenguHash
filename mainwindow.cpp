@@ -1,9 +1,13 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "worker.h"
 
 #include <QTextEdit>
 #include <QMessageBox>
-
+#include <QProgressDialog>
+#include <iostream>
+#include <thread>
+using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -12,7 +16,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     ui->textBrowser->setFont(QFont("Monospace",11));
     ui->textBrowser->setLineWrapMode(QTextEdit::NoWrap);
-   // getCheckSum();
+
+    updater->moveToThread(thread);
+    connect(updater,SIGNAL(req()), this, SLOT(getCheckSum()));
+    connect(thread, SIGNAL(destroyed()), updater, SLOT(deleteLater()));
 }
 
 MainWindow::~MainWindow()
@@ -220,13 +227,10 @@ for(int i=0; i<buffer.length(); i++){
 
 }
 
-
-
-
-
 void MainWindow::on_pushButton_clicked()
 {
-    getCheckSum();
+    updater->getHash();
+    //getCheckSum();
 }
 
 void MainWindow::on_actionAbout_triggered()
@@ -237,3 +241,4 @@ void MainWindow::on_actionAbout_triggered()
                           "<p>PenguSniff is a simple file integrity monitor/scanner."));
 
 }
+

@@ -7,7 +7,8 @@
 #include <QDebug>
 #include <QDir>
 #include <QDirIterator>
-//#include <QTextStream>
+#include <QThread>
+#include "worker.h"
 
 namespace Ui {
 class MainWindow;
@@ -21,26 +22,24 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void getCheckSum();
-
+   // void getCheckSum();
 
 
 private slots:
 
-
     void on_saveButton_clicked();
-
     void on_checkButton_clicked();
-
     void on_pushButton_clicked();
-
     void on_actionAbout_triggered();
+    void getCheckSum();
 
 private:
     Ui::MainWindow *ui;
     QByteArray sig;
     QString buffer;
 
+    QThread *thread = new QThread(this);
+    GUIUpdater *updater = new GUIUpdater();
 };
 
 #endif // MAINWINDOW_H
