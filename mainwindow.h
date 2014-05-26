@@ -20,12 +20,23 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
+
+    //Multi v2
+    void saveData();
+    void checkData();
+
+
     ~MainWindow();
+
 public slots:
 
     void getCheckSum();
     void checkCompleted();
     void saveCompleted();
+    void scanCompleted();
+
+
+
 
 private slots:
 
@@ -41,11 +52,19 @@ signals:
     void getHash();
     void getCheck();
     void save();
+    void sendTest();
+
+    //Multi v2
+    void scanFinished();
+    void saveFinished();
+    void checkFinished();
+
+    void checkTest();
 
 private:
     Ui::MainWindow *ui;
     QByteArray sig;
-    QString buffer;
+    QString text;
 
     QThread *pthread = new QThread(this);
     GUIUpdater *updater = new GUIUpdater();

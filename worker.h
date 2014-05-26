@@ -26,6 +26,7 @@ signals:
     void finishedSave();
     void close();
 
+    void test();
 
 public slots:
     void getpHash(){ emit req();}
@@ -167,7 +168,7 @@ public slots:
             parse = buffer.indexOf("\n",parsepos+1);
             qDebug() << "parsepos" << parsepos << endl;
             qDebug() << "parse" << parse << endl;
-            substring = buffer.mid(parsepos+2, parse-parsepos-2); //plus two for space
+            substring = buffer.mid(parsepos+2, parse-parsepos-2); //plus two for space. Minus difference
             sentryBuffer.append(substring);
             qDebug() << substring << endl;
     }
@@ -224,6 +225,9 @@ public slots:
         //ui->statusBar->showMessage("Saved to sentry.dat!", 1000);
     }
 
+    void doTest(){
+        emit test();
+    }
 };
 
 
