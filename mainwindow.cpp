@@ -17,9 +17,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->textBrowser->setFont(QFont("Monospace",11));
     ui->textBrowser->setLineWrapMode(QTextEdit::NoWrap);
 
-    updater->moveToThread(thread);
-    connect(updater,SIGNAL(req()), this, SLOT(getCheckSum()));
-    connect(thread, SIGNAL(destroyed()), updater, SLOT(deleteLater()));
+    updater->moveToThread(pthread);
+    connect(this,SIGNAL(getHash()),updater,SLOT(doWork()));
+    connect(updater,SIGNAL(Finished()),this,SLOT(getCheckSum()));
+    connect(updater,SIGNAL(Finished()),pthread,SLOT(quit()));
+    connect(pthread, SIGNAL(finished()), updater, SLOT(deleteLater()));
 }
 
 MainWindow::~MainWindow()
@@ -27,10 +29,14 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
+void MainWindow::closeEvent(QCloseEvent *){
+    updater->Finished();
+}
 
 void MainWindow::getCheckSum()
 {
+    ui->textBrowser->setText(updater->result2);
+    return;
 
     QByteArray result;
     QString hash;
@@ -61,7 +67,6 @@ void MainWindow::getCheckSum()
 
       ui->textBrowser->setText(QString(result));
 }
-
 
 void MainWindow::on_saveButton_clicked()
 {
@@ -97,6 +102,7 @@ void MainWindow::on_saveButton_clicked()
     ui->statusBar->showMessage("Saved to sentry.dat!", 1000);
 
 }
+
 
 void MainWindow::on_checkButton_clicked()
 {
@@ -159,7 +165,6 @@ void MainWindow::on_checkButton_clicked()
                     QTextStream ss(&s);
                     ss << left << qSetFieldWidth(50) << QFileInfo(hashFile).fileName() << "PASS" << qSetFieldWidth(0) << endl;
                     test.append(qPrintable(s));
-;
             }
 
             else if(QFileInfo(hashFile).fileName() == sentry.fileName())
@@ -227,11 +232,16 @@ for(int i=0; i<buffer.length(); i++){
 
 }
 
+
 void MainWindow::on_pushButton_clicked()
 {
-    updater->getHash();
+    pthread->start();
+    emit getHash();
+    //updater->getpHash();
+    //ui->textBrowser->setText(updater->result2);
     //getCheckSum();
 }
+
 
 void MainWindow::on_actionAbout_triggered()
 {

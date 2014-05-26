@@ -21,9 +21,9 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+public slots:
 
-   // void getCheckSum();
-
+    void getCheckSum();
 
 private slots:
 
@@ -31,14 +31,18 @@ private slots:
     void on_checkButton_clicked();
     void on_pushButton_clicked();
     void on_actionAbout_triggered();
-    void getCheckSum();
 
+
+protected:
+    void closeEvent(QCloseEvent *);
+signals:
+    void getHash();
 private:
     Ui::MainWindow *ui;
     QByteArray sig;
     QString buffer;
 
-    QThread *thread = new QThread(this);
+    QThread *pthread = new QThread(this);
     GUIUpdater *updater = new GUIUpdater();
 };
 
