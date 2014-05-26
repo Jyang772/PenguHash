@@ -24,6 +24,8 @@ public:
 public slots:
 
     void getCheckSum();
+    void checkCompleted();
+    void saveCompleted();
 
 private slots:
 
@@ -37,6 +39,9 @@ protected:
     void closeEvent(QCloseEvent *);
 signals:
     void getHash();
+    void getCheck();
+    void save();
+
 private:
     Ui::MainWindow *ui;
     QByteArray sig;
