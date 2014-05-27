@@ -5,7 +5,11 @@
 #include <QTextEdit>
 #include <QMessageBox>
 #include <QProgressDialog>
-#include <iostream>
+
+//File I/O
+#include <QFileDialog>
+
+//Threading
 #include <thread>
 #include <QtConcurrentRun>
 
@@ -100,7 +104,8 @@ void MainWindow::saveData(){
 
     QTextStream out(&file);
     file.open(QIODevice::WriteOnly);
-    QDir dir = QDir::currentPath();
+    //QDir dir = QDir::currentPath();
+    QDir dir = dirSelect;
     QDirIterator dirIt(dir.absolutePath(), QDir::Files, QDirIterator::Subdirectories);
       while(dirIt.hasNext())
       {
@@ -129,7 +134,8 @@ void MainWindow::getCheckSum()
     QString hash;
     QTextStream out(&result);
 
-    QDir dir = QDir::currentPath();
+    //QDir dir = QDir::currentPath();
+    QDir dir = dirSelect;
     QDirIterator dirIt(dir.absolutePath(), QDir::Files, QDirIterator::Subdirectories);
       while(dirIt.hasNext())
       {
@@ -188,7 +194,8 @@ void MainWindow::checkData(){
 
     QTextStream out(result);
 
-    QDir dir = QDir::currentPath();
+    //QDir dir = QDir::currentPath();
+    QDir dir = dirSelect;
     QDirIterator dirIt(dir.absolutePath(), QDir::Files, QDirIterator::Subdirectories);
       while(dirIt.hasNext())
       {
@@ -307,4 +314,13 @@ void MainWindow::checkCompleted(){
     ui->statusBar->showMessage("Check Completed",1000);
     ui->textBrowser->setText(QString(text));
 
+}
+
+
+
+//Menu Actions
+void MainWindow::on_actionSet_Directory_triggered()
+{
+    dirSelect = QFileDialog::getExistingDirectory(this);
+    qDebug() << dirSelect << endl;
 }

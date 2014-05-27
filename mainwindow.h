@@ -46,6 +46,8 @@ private slots:
     void on_actionAbout_triggered();
 
 
+    void on_actionSet_Directory_triggered();
+
 protected:
     void closeEvent(QCloseEvent *);
 signals:
@@ -68,6 +70,8 @@ private:
 
     QThread *pthread = new QThread(this);
     GUIUpdater *updater = new GUIUpdater();
+
+    QString dirSelect; //User selected directory
 };
 
 #endif // MAINWINDOW_H

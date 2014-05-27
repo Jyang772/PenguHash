@@ -88,6 +88,7 @@
     <property name="title">
      <string>Tools</string>
     </property>
+    <addaction name="actionSet_Directory"/>
     <addaction name="actionFind"/>
    </widget>
    <addaction name="menuTools"/>
@@ -110,6 +111,11 @@
   <action name="actionFind">
    <property name="text">
     <string>Find...</string>
+   </property>
+  </action>
+  <action name="actionSet_Directory">
+   <property name="text">
+    <string>Set Directory</string>
    </property>
   </action>
  </widget>
