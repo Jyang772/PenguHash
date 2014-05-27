@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>dependencies</DisplayName>
+    <Description></Description>
+    <Version>0.1.0-1</Version>
+    <ReleaseDate>2010-09-21</ReleaseDate>
+    <Name>dependencies</Name>
+
+    <Translations>
+
+    </Translations>
+    <Default>false</Default>
+    <Script>installscript.qs</Script>
+</Package>
