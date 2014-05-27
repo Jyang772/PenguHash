@@ -5,5 +5,17 @@
     <Title>Pengu Installer</Title>
     <Publisher>MicroPenguin</Publisher>
     <StartMenuDir>Super App</StartMenuDir>
-    <TargetDir>@RootDir@InstallationDirectory@Pengu@</TargetDir>
+    <TargetDir>@RootDir@InstallationDirectory</TargetDir>
+
+
+<RemoteRepositories>
+     <Repository>
+             <Url>http://micropenguin.net/files/Packages</Url>
+             <Enabled>1</Enabled>
+          
+             <DisplayName>repository</DisplayName>
+     </Repository>
+</RemoteRepositories>
+
+
 </Installer>

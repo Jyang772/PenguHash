@@ -6,4 +6,16 @@
     <Publisher>MicroPenguin</Publisher>
     <StartMenuDir>Super App</StartMenuDir>
     <TargetDir>@RootDir@InstallationDirectory</TargetDir>
+
+
+<RemoteRepositories>
+     <Repository>
+             <Url>http://micropenguin.net/files/Packages/repository</Url>
+             <Enabled>1</Enabled>
+          
+             <DisplayName>repository</DisplayName>
+     </Repository>
+</RemoteRepositories>
+
+
 </Installer>

@@ -1,0 +1,32 @@
+<Updates>
+ <ApplicationName>{AnyApplication}</ApplicationName>
+ <ApplicationVersion>1.0.0</ApplicationVersion>
+ <Checksum>true</Checksum>
+ <PackageUpdate>
+  <Name>Dep</Name>
+  <DisplayName>dependencies</DisplayName>
+  <Description/>
+  <Version>0.1.0-1</Version>
+  <ReleaseDate>2010-09-21</ReleaseDate>
+  <Default>false</Default>
+  <Script>installscript.qs</Script>
+  <UpdateFile CompressedSize="5076077" OS="Any" UncompressedSize="15846440"/>
+  <DownloadableArchives>content.7z</DownloadableArchives>
+  <SHA1>48b733117f3743335ce4838df5d7c2480728b0a5</SHA1>
+ </PackageUpdate>
+ <PackageUpdate>
+  <Name>PenguSniff</Name>
+  <DisplayName>The root component</DisplayName>
+  <Description>Install this example.</Description>
+  <Version>0.1.0-1</Version>
+  <ReleaseDate>2010-09-21</ReleaseDate>
+  <Default>script</Default>
+  <Script>installscript.qs</Script>
+  <UpdateFile CompressedSize="31246" OS="Any" UncompressedSize="118366"/>
+  <DownloadableArchives>content.7z</DownloadableArchives>
+  <Licenses>
+   <License name="Public License Agreement" file="license.txt"/>
+  </Licenses>
+  <SHA1>c5b08cfe4d6d3b8371f1e0e15d2fe528e6f33558</SHA1>
+ </PackageUpdate>
+</Updates>
