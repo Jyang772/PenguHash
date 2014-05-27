@@ -2,5 +2,6 @@
 /Release/binarycreator
 /Release/installerbase
 /Release/packages/PenguSniff/data
+/Release/repogen
 
 MakeFile
