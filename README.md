@@ -17,11 +17,11 @@ To create an online only binary:
 `./binarycreator -p packages -c config/config.xml -n installer`
 
 
--e == exclude packages that will be downloaded
+* -e == exclude packages that will be downloaded
 
--i == include packages in online repository
+* -i == include packages in online repository
 
--n == online only binary
+* -n == online only binary
 
 =========
 
