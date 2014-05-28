@@ -106,6 +106,9 @@ void MainWindow::saveData(){
     file.open(QIODevice::WriteOnly);
     //QDir dir = QDir::currentPath();
     QDir dir = dirSelect;
+
+    out << "Directory: " << dirSelect << endl; //prepend directory from which scan was selected to begin from
+
     QDirIterator dirIt(dir.absolutePath(), QDir::Files, QDirIterator::Subdirectories);
       while(dirIt.hasNext())
       {
@@ -174,7 +177,6 @@ void MainWindow::checkData(){
     QString hash;
     int placeholder = 0;
     int position = 0;
-
     //ui->textBrowser->clear();
 
     QFile sentry("sentry.dat");
@@ -189,13 +191,26 @@ void MainWindow::checkData(){
            sentry.close();
        }
 
-       //qDebug() << "Buffer: " << buffer << endl;
-
-
     QTextStream out(result);
+
+
+    int parse = 0;
+    int parsepos = 0;
+    int directory = 0; //find directory
+
+    //FIND DIRECTORY
+    directory = buffer.indexOf("Directory:",0);
+    parse = buffer.indexOf("\n",directory);
+    dirSelect = buffer.mid(11,parse-11);
+    qDebug() << "PARSE! " << parse << endl;
+    qDebug() << "Directory: " << dirSelect << endl;
+    //
+
+
 
     //QDir dir = QDir::currentPath();
     QDir dir = dirSelect;
+
     QDirIterator dirIt(dir.absolutePath(), QDir::Files, QDirIterator::Subdirectories);
       while(dirIt.hasNext())
       {
@@ -252,13 +267,14 @@ void MainWindow::checkData(){
 
 // This should probably go in a separate function //
 
-    int parse = 0;
-    int parsepos = 0;
+
+
     QVector<QString> sentryBuffer;
     QString substring;
 
     QString s;
     QTextStream ss(&s);
+
 
 
 for(int i=0; i<buffer.length(); i++){
@@ -286,6 +302,9 @@ for(int i=0; i<buffer.length(); i++){
            //test.prepend(s);
         }
 
+
+
+      ss << left << qSetFieldWidth(50) << dirSelect << "DIRECTORY" << qSetFieldWidth(0) << endl;
       test.prepend(s);
 
       text= test;

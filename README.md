@@ -22,3 +22,10 @@ To create an online only binary:
 -i == include packages in online repository
 
 -n == online only binary
+
+=========
+
+
+Installation:
+
+Requires Sudo if user chooses to download/install dependencies

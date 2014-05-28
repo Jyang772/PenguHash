@@ -17,9 +17,9 @@
  <PackageUpdate>
   <Name>PenguSniff</Name>
   <DisplayName>PenguSniff</DisplayName>
-  <Description>Install this example.</Description>
-  <Version>0.1.0-1</Version>
-  <ReleaseDate>2010-09-21</ReleaseDate>
+  <Description>Main Program.</Description>
+  <Version>0.1.0-3</Version>
+  <ReleaseDate>2014-05-28</ReleaseDate>
   <Default>script</Default>
   <Script>installscript.qs</Script>
   <UpdateFile CompressedSize="31246" OS="Any" UncompressedSize="118366"/>
@@ -27,6 +27,6 @@
   <Licenses>
    <License name="Public License Agreement" file="license.txt"/>
   </Licenses>
-  <SHA1>709164e25905f1fb3abe3adc7d0005068fad62cc</SHA1>
+  <SHA1>89db2fff93763130c22915ea9e5a023908c90453</SHA1>
  </PackageUpdate>
 </Updates>
