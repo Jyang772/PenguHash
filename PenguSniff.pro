@@ -10,6 +10,7 @@ TARGET = PenguSniff
 INCLUDEPATH += .
 
 # Input
-HEADERS += mainwindow.h worker.h
+HEADERS += mainwindow.h worker.h \
+    getfiletotal.h
 FORMS += mainwindow.ui
 SOURCES += main.cpp mainwindow.cpp

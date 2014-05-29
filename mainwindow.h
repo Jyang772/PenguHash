@@ -9,6 +9,7 @@
 #include <QDirIterator>
 #include <QThread>
 #include "worker.h"
+#include "getfiletotal.h"
 
 namespace Ui {
 class MainWindow;
@@ -21,6 +22,28 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
 
+
+
+    enum Code{
+        saveFinished,
+        checkFinished,
+        scanFinished,
+        none
+    };
+
+    Code test(QString method){
+        if(method == "scanFinished")
+            return scanFinished;
+         if(method == "checkFinished")
+            return checkFinished;
+        if(method == "saveFinished")
+            return saveFinished;
+        return none;
+    }
+
+
+
+
     //Multi v2
     void saveData();
     void checkData();
@@ -30,7 +53,8 @@ public:
 
 public slots:
 
-    void getCheckSum();
+    void action(QString);
+
     void checkCompleted();
     void saveCompleted();
     void scanCompleted();
@@ -56,12 +80,15 @@ signals:
     void save();
     void sendTest();
 
-    //Multi v2
-    void scanFinished();
-    void saveFinished();
-    void checkFinished();
+
 
     void checkTest();
+
+    //Multi v4
+    void userSelect(QString);
+    void selectDir(QString);
+    void hidebar();
+    void getfileTotal();
 
 private:
     Ui::MainWindow *ui;
@@ -69,6 +96,8 @@ private:
     QString text;
 
     QThread *pthread = new QThread(this);
+    QThread *fthread = new QThread(this);
+    GetFileTotal *fileTotal = new GetFileTotal();
     GUIUpdater *updater = new GUIUpdater();
 
     QString dirSelect; //User selected directory
