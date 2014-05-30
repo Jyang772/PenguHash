@@ -2,8 +2,8 @@
 <Package>
     <DisplayName>PenguSniff</DisplayName>
     <Description>Main Program.</Description>
-    <Version>0.1.0-3</Version>
-    <ReleaseDate>2010-09-21</ReleaseDate>
+    <Version>1.1.1-4</Version>
+    <ReleaseDate>2014-05-28</ReleaseDate>
     <Name>PenguSniff</Name>
     <Licenses>
         <License name="Public License Agreement" file="license.txt" />

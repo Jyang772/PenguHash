@@ -49,6 +49,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this,SIGNAL(getfileTotal()),fileTotal,SLOT(getfileTotal()));        //request from main thread
     connect(fileTotal,SIGNAL(finished(int)),updater,SLOT(getfileTotal(int)));   //transfer total from getfiletotal object to worker object
     connect(updater,SIGNAL(getfileTotal()),fileTotal,SLOT(getfileTotal()));     //request from updater
+    connect(updater,SIGNAL(displayFileTotal(int)),this,SLOT(displayFileTotal(int)));
 
     //Create ProgressBar
     QProgressBar *bar = new QProgressBar(ui->statusBar);
@@ -167,4 +168,10 @@ void MainWindow::on_actionSet_Directory_triggered()
     emit selectDir(dirSelect);
     emit getfileTotal();
     qDebug() << dirSelect << endl;
+}
+
+void MainWindow::displayFileTotal(int total)
+{
+    ui->statusBar->clearMessage();
+    ui->statusBar->showMessage("Files: " + QString::number(total),1000);
 }

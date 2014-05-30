@@ -51,6 +51,7 @@ signals:
     void Finished(QString);
     void percentChanged(int);
     void getfileTotal();
+    void displayFileTotal(int); //update status bar
 //    void finishedCheck();
 //    void finishedSave();
     void close();
@@ -61,6 +62,7 @@ public slots:
     void getfileTotal(int total){
         numfiles = total;
         qDebug() << "GOT FILE TOTAL: " << numfiles << endl;
+        emit displayFileTotal(numfiles);
     }
 
     //Determine Method to use

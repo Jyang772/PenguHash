@@ -71,6 +71,7 @@ private slots:
 
 
     void on_actionSet_Directory_triggered();
+    void displayFileTotal(int);
 
 protected:
     void closeEvent(QCloseEvent *);
