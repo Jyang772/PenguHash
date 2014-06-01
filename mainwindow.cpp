@@ -51,6 +51,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(updater,SIGNAL(getfileTotal()),fileTotal,SLOT(getfileTotal()));     //request from updater
     connect(updater,SIGNAL(displayFileTotal(int)),this,SLOT(displayFileTotal(int)));
 
+    connect(fileTotal,SIGNAL(finished(int)),this,SLOT(enableButton()));
+
     //Create ProgressBar
     QProgressBar *bar = new QProgressBar(ui->statusBar);
     ui->statusBar->addWidget(bar);
@@ -63,7 +65,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //fileTotal->getfileTotal();
     emit getfileTotal();
-
+    ui->pushButton->setEnabled(false);
 }
 
 MainWindow::~MainWindow()
@@ -97,7 +99,6 @@ void MainWindow::on_checkButton_clicked()
 void MainWindow::on_pushButton_clicked()
 {
     ui->statusBar->showMessage("Scanning...",0);
-
     emit userSelect("scan");
 
     //QtConcurrent::run(this,&MainWindow::getCheckSum);
@@ -164,6 +165,7 @@ void MainWindow::checkCompleted(){
 //Menu Actions
 void MainWindow::on_actionSet_Directory_triggered()
 {
+    ui->pushButton->setEnabled(false);
     dirSelect = QFileDialog::getExistingDirectory(this);
     emit selectDir(dirSelect);
     emit getfileTotal();
@@ -174,4 +176,8 @@ void MainWindow::displayFileTotal(int total)
 {
     ui->statusBar->clearMessage();
     ui->statusBar->showMessage("Files: " + QString::number(total),1000);
+}
+
+void MainWindow::enableButton(){
+    ui->pushButton->setEnabled(true);
 }

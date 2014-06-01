@@ -21,6 +21,8 @@ signals:
     void finished(int);
     void close();
 
+    void disableScan();
+
 public slots:
 
     void selectDir(QString dir){
@@ -28,6 +30,9 @@ public slots:
     }
 
     void getfileTotal(){
+
+        emit disableScan(); //Disable Scan button until directory scanned
+
         QDir dir = dirSelect;
         numfiles = 0;
         QDirIterator dirIt(dir.absolutePath(), QDir::Files, QDirIterator::Subdirectories);

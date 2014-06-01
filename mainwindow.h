@@ -60,8 +60,6 @@ public slots:
     void scanCompleted();
 
 
-
-
 private slots:
 
     void on_saveButton_clicked();
@@ -72,6 +70,7 @@ private slots:
 
     void on_actionSet_Directory_triggered();
     void displayFileTotal(int);
+    void enableButton();
 
 protected:
     void closeEvent(QCloseEvent *);
