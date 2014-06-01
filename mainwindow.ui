@@ -91,7 +91,15 @@
     <addaction name="actionSet_Directory"/>
     <addaction name="actionFind"/>
    </widget>
+   <widget class="QMenu" name="menuFormat">
+    <property name="title">
+     <string>Format</string>
+    </property>
+    <addaction name="actionText"/>
+    <addaction name="actionBinary"/>
+   </widget>
    <addaction name="menuTools"/>
+   <addaction name="menuFormat"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -116,6 +124,30 @@
   <action name="actionSet_Directory">
    <property name="text">
     <string>Set Directory</string>
+   </property>
+  </action>
+  <action name="actionFormat">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Format</string>
+   </property>
+  </action>
+  <action name="actionText">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Text</string>
+   </property>
+  </action>
+  <action name="actionBinary">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Binary</string>
    </property>
   </action>
  </widget>

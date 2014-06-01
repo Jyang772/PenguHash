@@ -83,7 +83,10 @@ void MainWindow::on_saveButton_clicked()
 {
     //QtConcurrent::run(this,&MainWindow::saveData);
     ui->statusBar->showMessage("Saving...",0);
+    if(format)
     emit userSelect("save");
+    else
+        emit userSelect("saveOld");
 }
 
 void MainWindow::on_checkButton_clicked()
@@ -91,7 +94,10 @@ void MainWindow::on_checkButton_clicked()
     ui->textBrowser->clear();
     qDebug() << "check clicked";
     ui->statusBar->showMessage("Checking...",0);
+    if(format)
     emit userSelect("check");
+    else
+        emit userSelect("checkOld");
    //QtConcurrent::run(this,&MainWindow::checkData);
 
 }
@@ -157,7 +163,7 @@ void MainWindow::checkCompleted(){
     ui->statusBar->showMessage("Check Completed",1000);
     text = updater->result2;
     ui->textBrowser->setText(QString(text));
-    emit hidebar();
+    //emit hidebar();
 }
 
 
@@ -180,4 +186,18 @@ void MainWindow::displayFileTotal(int total)
 
 void MainWindow::enableButton(){
     ui->pushButton->setEnabled(true);
+}
+
+
+void MainWindow::on_actionText_triggered()
+{
+    ui->actionBinary->setChecked(false);
+    format = false;
+
+}
+
+void MainWindow::on_actionBinary_triggered()
+{
+    ui->actionText->setChecked(false);
+    format = true;
 }

@@ -72,6 +72,11 @@ private slots:
     void displayFileTotal(int);
     void enableButton();
 
+
+    void on_actionText_triggered();
+
+    void on_actionBinary_triggered();
+
 protected:
     void closeEvent(QCloseEvent *);
 signals:
@@ -94,6 +99,7 @@ private:
     Ui::MainWindow *ui;
     QByteArray sig;
     QString text;
+    bool format = false;
 
     QThread *pthread = new QThread(this);
     QThread *fthread = new QThread(this);
