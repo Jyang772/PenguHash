@@ -152,7 +152,7 @@ public slots:
 
 
     void checkFile(){
-        QString hash;
+        QByteArray hash;
         QString fileName;
 
         QString hash_file;
@@ -172,7 +172,7 @@ public slots:
             while(!in.atEnd()){
 
                 in >> hash >> fileName;
-                hashes.append(hash);
+                hashes.append(hash.toHex());
                 hashes.append(fileName);
             }
             qDebug() << hashes;
@@ -180,8 +180,9 @@ public slots:
 
         }
 
-
+        int position;
         int counter = 0;
+        emit getfileTotal();
         int totalwork = hashes.size() + numfiles;
 
         QDir dir = dirSelect;
@@ -194,12 +195,13 @@ public slots:
 
                     hash_file = QCryptographicHash::hash(hashFile.readAll(), QCryptographicHash::Md5).toHex();
                     fileName = hashFile.fileName();
-                    buffer.append(hash_file);
+                    buffer.append(fileName);
 
+                    position = hashes.indexOf(fileName);
 
-                    if(hashes.indexOf(hash_file) != -1){
-                        //qDebug() << "HASH: " << hashes.at(hashes.indexOf(hash_file));
-                        //qDebug() << "FILENAME: " << hashes.at(hashes.indexOf(hash_file)+1);
+                    if(position != -1 && hashes.at(position-1) == hash_file){
+//                        qDebug() << "HASH: " << hashes.at(hashes.indexOf(hash_file));
+//                        qDebug() << "FILENAME: " << hashes.at(hashes.indexOf(hash_file)+1);
                         ss << left << qSetFieldWidth(50) << QFileInfo(hashFile).fileName() << "PASS" << qSetFieldWidth(0) << endl;
                         output.append(s);
                         s.clear();
@@ -210,6 +212,7 @@ public slots:
                         s.clear();
                     }
                     else{
+                        qDebug() << "FAIL: " << hashFile.fileName();
                         ss << left << qSetFieldWidth(50) << hashFile.fileName()/*QFileInfo(hashFile).fileName()*/ << "FAIL" << qSetFieldWidth(0) << endl;
                         output.prepend(s);
                         s.clear();
@@ -219,15 +222,16 @@ public slots:
                 counter++;
                 percent = counter * 100 / totalwork;
                 emit percentChanged(percent);
+                hash_file.clear();
             }
         }
             qDebug() << endl << endl;
 
-        for(int i=0; i<hashes.size();i+=2)
+        for(int i=1; i<hashes.size();i+=2)
         {
             qDebug() << hashes[i];
             if(buffer.indexOf(hashes[i]) == -1){
-                ss << left << qSetFieldWidth(50) << hashes[i+1]/*QFileInfo(hashFile).fileName()*/ << "MISSING" << qSetFieldWidth(0) << endl;
+                ss << left << qSetFieldWidth(50) << hashes[i]/*QFileInfo(hashFile).fileName()*/ << "MISSING" << qSetFieldWidth(0) << endl;
                 output.prepend(s);
                 s.clear();
                }
@@ -275,7 +279,7 @@ public slots:
 //                  out << QCryptographicHash::hash(hashFile.readAll(), QCryptographicHash::Md5).toHex()
 //                      << " : " << hashFile.fileName()/*dirIt.fileName()*/ << "\n";
 
-                  out << QString(QCryptographicHash::hash(hashFile.readAll(), QCryptographicHash::Md5).toHex()) << hashFile.fileName();
+                  out << QCryptographicHash::hash(hashFile.readAll(), QCryptographicHash::Md5) << hashFile.fileName();
                   counter++;
               }
               percent = counter * 100 / numfiles;
