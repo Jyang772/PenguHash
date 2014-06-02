@@ -13,6 +13,12 @@
 #include <thread>
 #include <QtConcurrentRun>
 
+//Table
+#include <QTableWidgetItem>
+#include <QClipboard>
+#include <QShortcut>
+
+
 using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -66,6 +72,18 @@ MainWindow::MainWindow(QWidget *parent) :
     //fileTotal->getfileTotal();
     emit getfileTotal();
     ui->pushButton->setEnabled(false);
+
+
+
+    //TABLE FUNZ
+    QShortcut *shortcut = new QShortcut(QKeySequence("Ctrl+C"), this);
+    connect(shortcut,SIGNAL(activated()),this,SLOT(on_actionCopy_triggered()));
+    ui->tableWidget->setColumnCount(3);
+//    ui->tableWidget->setRowCount(100);
+
+    ui->tableWidget->setHorizontalHeaderLabels(QStringList() << "File" << "Hash" << "Check");
+    ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(1,QHeaderView::Stretch);
 }
 
 MainWindow::~MainWindow()
@@ -149,6 +167,25 @@ void MainWindow::scanCompleted()
     text = updater->result2;
     ui->textBrowser->setText(QString(text));
     emit hidebar();
+
+
+    ui->tableWidget->setRowCount(numfiles);
+    ui->tableWidget->setColumnCount(2);
+
+
+    QStringList rows = text.split('\n');
+
+    for(int i=0; i<numfiles; i++){
+        QStringList columns = rows[i].split('\t');
+        int troll = 1;
+        for(int j=0; j<2; j++){
+            ui->tableWidget->setItem(i,j,new QTableWidgetItem(columns[troll]));
+            troll--;
+        }
+    }
+    ui->tableWidget->resizeColumnsToContents();
+    ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
+
 }
 
 void MainWindow::saveCompleted()
@@ -163,6 +200,27 @@ void MainWindow::checkCompleted(){
     ui->statusBar->showMessage("Check Completed",1000);
     text = updater->result2;
     ui->textBrowser->setText(QString(text));
+
+
+    ui->tableWidget->setRowCount(numfiles);
+    ui->tableWidget->setColumnCount(2);
+    ui->tableWidget->setHorizontalHeaderLabels(QStringList() << "Files" << "Check");
+
+
+    QStringList rows = updater->checkoutput.split('\n');
+    qDebug() << rows;
+
+    for(int i=0; i<numfiles; i++){
+        QStringList columns = rows[i].split('\t');
+        for(int j=0; j<2; j++){
+            ui->tableWidget->setItem(i,j,new QTableWidgetItem(columns[j]));
+        }
+    }
+    ui->tableWidget->resizeColumnsToContents();
+    ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
+    updater->checkoutput.clear();
+
+
     //emit hidebar();
 }
 
@@ -182,6 +240,7 @@ void MainWindow::displayFileTotal(int total)
 {
     ui->statusBar->clearMessage();
     ui->statusBar->showMessage("Files: " + QString::number(total),1000);
+    numfiles = total;
 }
 
 void MainWindow::enableButton(){
@@ -200,4 +259,27 @@ void MainWindow::on_actionBinary_triggered()
 {
     ui->actionText->setChecked(false);
     format = true;
+}
+
+void MainWindow::on_actionCopy_triggered()
+{
+    QString str;
+
+    QList<QTableWidgetSelectionRange> ranges = ui->tableWidget->selectedRanges();
+
+    if(ranges.isEmpty())
+        return;
+
+    QTableWidgetSelectionRange range =  ui->tableWidget->selectedRanges().first();
+    for(int i=0; i<range.rowCount(); i++){
+        if(i>0)
+            str += '\n';
+        for(int j=0; j<range.columnCount();j++){
+            if(j>0)
+                str+= "\t";
+            str+=ui->tableWidget->item(range.topRow()+i,range.leftColumn()+j)->text();
+        }
+    }
+    QApplication::clipboard()->setText(str);
+
 }

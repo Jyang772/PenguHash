@@ -22,6 +22,8 @@ public:
    // void getHash(){ emit req(); }
     QString result2;
     QString dirSelect;
+    QString checkoutput;
+
 
     //ProgressBar counting
     int numfiles, percent, counter = 0;
@@ -125,8 +127,12 @@ public slots:
               }
               else
               {
+//                  hash = QCryptographicHash::hash(hashFile.readAll(), QCryptographicHash::Md5).toHex();
+//                  out << hash << " : " << dirIt.fileName() << "\n";
+
                   hash = QCryptographicHash::hash(hashFile.readAll(), QCryptographicHash::Md5).toHex();
-                  out << hash << " : " << dirIt.fileName() << "\n";
+                  out << hash << "\t" << dirIt.fileName() << "\n";
+
 
 
                   qDebug() << "Filename: " << QFileInfo(hashFile).fileName() << endl;
@@ -155,6 +161,7 @@ public slots:
         QByteArray hash;
         QString fileName;
 
+
         QString hash_file;
         QVector<QString> hashes;
         QVector<QString> buffer;
@@ -175,7 +182,7 @@ public slots:
                 hashes.append(hash.toHex());
                 hashes.append(fileName);
             }
-            qDebug() << hashes;
+            //qDebug() << hashes;
 
 
         }
@@ -205,17 +212,21 @@ public slots:
                         ss << left << qSetFieldWidth(50) << QFileInfo(hashFile).fileName() << "PASS" << qSetFieldWidth(0) << endl;
                         output.append(s);
                         s.clear();
+                        checkoutput.append(QFileInfo(hashFile).fileName() + '\t' + "PASS" + '\n');
                     }
                     else if(QFileInfo(hashFile).fileName() == sentry.fileName()){
                         ss << left << qSetFieldWidth(50) << QFileInfo(hashFile).fileName() << "Sentry" << qSetFieldWidth(0) << endl;
                         output.prepend(s);
                         s.clear();
+                        checkoutput.append(QFileInfo(hashFile).fileName() + '\t' + "Sentry" + '\n');
                     }
                     else{
                         qDebug() << "FAIL: " << hashFile.fileName();
                         ss << left << qSetFieldWidth(50) << hashFile.fileName()/*QFileInfo(hashFile).fileName()*/ << "FAIL" << qSetFieldWidth(0) << endl;
                         output.prepend(s);
                         s.clear();
+                        checkoutput.prepend(QFileInfo(hashFile).fileName() + '\t' + "FAIL" + '\n');
+
                     }
                 }
 
@@ -374,6 +385,7 @@ public slots:
                             QTextStream ss(&s);
                             ss << left << qSetFieldWidth(50) << QFileInfo(hashFile).fileName() << "PASS" << qSetFieldWidth(0) << endl;
                             test.append(qPrintable(s));
+                            checkoutput.append(QFileInfo(hashFile).fileName() + '\t' + "PASS" + '\n');
                     }
 
                     else if(QFileInfo(hashFile).fileName() == sentry.fileName())
@@ -382,6 +394,7 @@ public slots:
                             QTextStream ss(&s);
                             ss << left << qSetFieldWidth(50) << QFileInfo(hashFile).fileName() << "SENTRY" << qSetFieldWidth(0) << endl;
                             test.append(qPrintable(s));
+                            checkoutput.append(QFileInfo(hashFile).fileName() + '\t' + "Sentry" + '\n');
                     }
 
                     else{
@@ -390,6 +403,7 @@ public slots:
 
                         ss << left << qSetFieldWidth(50) << hashFile.fileName()/*QFileInfo(hashFile).fileName()*/ << "FAIL" << qSetFieldWidth(0) << endl;
                         test.prepend((s));
+                         checkoutput.prepend(QFileInfo(hashFile).fileName() + '\t' + "FAIL" + '\n');
                     }
 
                     counter++; //ProgressBar
@@ -511,3 +525,54 @@ public slots:
 
 
 #endif // WORKER_H
+
+
+
+
+
+/*
+void scanFile()
+{
+    qDebug() << "PRESSED" << endl;
+    QByteArray result;
+    QString hash;
+    QTextStream out(&result);
+
+    //QDir dir = QDir::currentPath();
+    QDir dir = dirSelect;
+    qDebug() << "numfiles: " << numfiles << endl;
+    QDirIterator dirIt(dir.absolutePath(), QDir::Files, QDirIterator::Subdirectories);
+      while(dirIt.hasNext())
+      {
+          dirIt.next();
+          QFile hashFile(dirIt.filePath());
+          if(!hashFile.open(QFile::ReadOnly))
+          {
+              out << "File Error: '" << hashFile.errorString()
+                  << "' for file " << dirIt.fileName() << "\n";
+          }
+          else
+          {
+              hash = QCryptographicHash::hash(hashFile.readAll(), QCryptographicHash::Md5).toHex();
+              out << hash << " : " << dirIt.fileName() << "\n";
+
+
+              qDebug() << "Filename: " << QFileInfo(hashFile).fileName() << endl;
+              qDebug() << "Hash: " << hash << endl;
+              counter++;
+          }
+
+          percent = counter * 100 / numfiles;
+          emit percentChanged(percent);
+          out.flush(); //Force output to show up immediately
+      }
+
+    qDebug() << "FILES: " << counter << endl;
+    counter = 0;
+    percent = 0;
+
+      result2 = QString(result);
+      emit Finished("scanFinished");
+}
+
+*/

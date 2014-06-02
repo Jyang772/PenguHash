@@ -8,6 +8,8 @@
 #include <QDir>
 #include <QDirIterator>
 #include <QThread>
+#include <QStandardItemModel>
+
 #include "worker.h"
 #include "getfiletotal.h"
 
@@ -77,6 +79,8 @@ private slots:
 
     void on_actionBinary_triggered();
 
+    void on_actionCopy_triggered();
+
 protected:
     void closeEvent(QCloseEvent *);
 signals:
@@ -107,6 +111,9 @@ private:
     GUIUpdater *updater = new GUIUpdater();
 
     QString dirSelect; //User selected directory
+
+    int numfiles;
+
 };
 
 #endif // MAINWINDOW_H
