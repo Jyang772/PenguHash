@@ -131,7 +131,7 @@ public slots:
 //                  out << hash << " : " << dirIt.fileName() << "\n";
 
                   hash = QCryptographicHash::hash(hashFile.readAll(), QCryptographicHash::Md5).toHex();
-                  out << hash << "\t" << dirIt.fileName() << "\n";
+                  out << hash << "\t" << hashFile.fileName() << "\n";
 
 
 
@@ -457,7 +457,7 @@ public slots:
                 if(fileBuffer.indexOf(sentryBuffer.at(i)) == -1)
                {
                    ss << left << qSetFieldWidth(50) << sentryBuffer.at(i) << "MISSING" << qSetFieldWidth(0) << endl;
-                   checkoutput.prepend(sentryBuffer.at(i) + '\t'  + hash + '\t' + "MISSING" + '\n');
+                   checkoutput.prepend(sentryBuffer.at(i) + '\t'  + " " + '\t' + "MISSING" + '\n');
                    //test.prepend(s);
                 }
                 counter++;

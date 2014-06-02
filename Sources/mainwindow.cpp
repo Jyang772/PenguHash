@@ -184,7 +184,8 @@ void MainWindow::scanCompleted()
             troll--;
         }
     }
-    ui->tableWidget->resizeColumnsToContents();
+    //ui->tableWidget->resizeColumnsToContents();
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(0,QHeaderView::Stretch);
     ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
 
 }
@@ -267,6 +268,8 @@ void MainWindow::on_actionBinary_triggered()
 void MainWindow::on_actionCopy_triggered()
 {
     QString str;
+    QString s;
+    QTextStream ss(&s);
 
     QList<QTableWidgetSelectionRange> ranges = ui->tableWidget->selectedRanges();
 
@@ -280,9 +283,13 @@ void MainWindow::on_actionCopy_triggered()
         for(int j=0; j<range.columnCount();j++){
             if(j>0)
                 str+= "\t";
+            ss << left << qSetFieldWidth(55) << ui->tableWidget->item(range.topRow()+i,range.leftColumn()+j)->text() << qSetFieldWidth(0);
             str+=ui->tableWidget->item(range.topRow()+i,range.leftColumn()+j)->text();
         }
+        ss << endl;
     }
-    QApplication::clipboard()->setText(str);
+    QApplication::clipboard()->setText(s);
+   // qDebug() << str;
+    //qDebug() << s;
 
 }

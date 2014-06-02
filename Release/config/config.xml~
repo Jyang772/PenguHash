@@ -11,7 +11,7 @@
 <RemoteRepositories>
      <Repository>
              <Url>http://micropenguin.net/files/Packages/repository</Url>
-             <Enabled>0</Enabled>
+             <Enabled>1</Enabled>
           
              <DisplayName>repository</DisplayName>
      </Repository>
