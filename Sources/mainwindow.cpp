@@ -132,7 +132,7 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::on_actionAbout_triggered()
 {
     QMessageBox::about(this, tr("About PenguSniff"),
-                       tr("<h2>PenguSniff v1.0.0</h2>"
+                       tr("<h2>PenguHash v1.1.2</h2>"
                           "<p>Copyright &copy; 2014 MicroPenguin"
                           "<p>PenguSniff is a simple file integrity monitor/scanner."));
 
