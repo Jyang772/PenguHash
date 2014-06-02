@@ -19,7 +19,7 @@
   <DisplayName>PenguSniff</DisplayName>
   <Description>Main Program.</Description>
   <Version>1.1.2-0</Version>
-  <ReleaseDate>2014-06-2</ReleaseDate>
+  <ReleaseDate>2014-05-28</ReleaseDate>
   <Default>script</Default>
   <Script>installscript.qs</Script>
   <UpdateFile CompressedSize="39985" OS="Any" UncompressedSize="140183"/>
