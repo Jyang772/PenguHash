@@ -212,20 +212,20 @@ public slots:
                         ss << left << qSetFieldWidth(50) << QFileInfo(hashFile).fileName() << "PASS" << qSetFieldWidth(0) << endl;
                         output.append(s);
                         s.clear();
-                        checkoutput.append(QFileInfo(hashFile).fileName() + '\t' + "PASS" + '\n');
+                        checkoutput.append(QFileInfo(hashFile).fileName() + '\t' + hash_file + '\t' + "PASS" + '\n');
                     }
                     else if(QFileInfo(hashFile).fileName() == sentry.fileName()){
                         ss << left << qSetFieldWidth(50) << QFileInfo(hashFile).fileName() << "Sentry" << qSetFieldWidth(0) << endl;
                         output.prepend(s);
                         s.clear();
-                        checkoutput.append(QFileInfo(hashFile).fileName() + '\t' + "Sentry" + '\n');
+                        checkoutput.append(QFileInfo(hashFile).fileName() + '\t' + hash_file + '\t' +  "Sentry" + '\n');
                     }
                     else{
                         qDebug() << "FAIL: " << hashFile.fileName();
                         ss << left << qSetFieldWidth(50) << hashFile.fileName()/*QFileInfo(hashFile).fileName()*/ << "FAIL" << qSetFieldWidth(0) << endl;
                         output.prepend(s);
                         s.clear();
-                        checkoutput.prepend(QFileInfo(hashFile).fileName() + '\t' + "FAIL" + '\n');
+                        checkoutput.prepend(hashFile.fileName() + '\t'  + hash_file + '\t' + "FAIL" + '\n');
 
                     }
                 }
@@ -243,6 +243,8 @@ public slots:
             qDebug() << hashes[i];
             if(buffer.indexOf(hashes[i]) == -1){
                 ss << left << qSetFieldWidth(50) << hashes[i]/*QFileInfo(hashFile).fileName()*/ << "MISSING" << qSetFieldWidth(0) << endl;
+                checkoutput.prepend(hashes[i] + '\t'  + hash[i-1] + '\t' + "MISSING" + '\n');
+
                 output.prepend(s);
                 s.clear();
                }
@@ -385,7 +387,7 @@ public slots:
                             QTextStream ss(&s);
                             ss << left << qSetFieldWidth(50) << QFileInfo(hashFile).fileName() << "PASS" << qSetFieldWidth(0) << endl;
                             test.append(qPrintable(s));
-                            checkoutput.append(QFileInfo(hashFile).fileName() + '\t' + "PASS" + '\n');
+                            checkoutput.append(QFileInfo(hashFile).fileName() + '\t'  + hash + '\t' + "PASS" + '\n');
                     }
 
                     else if(QFileInfo(hashFile).fileName() == sentry.fileName())
@@ -394,7 +396,7 @@ public slots:
                             QTextStream ss(&s);
                             ss << left << qSetFieldWidth(50) << QFileInfo(hashFile).fileName() << "SENTRY" << qSetFieldWidth(0) << endl;
                             test.append(qPrintable(s));
-                            checkoutput.append(QFileInfo(hashFile).fileName() + '\t' + "Sentry" + '\n');
+                            checkoutput.append(QFileInfo(hashFile).fileName() + '\t'  + hash + '\t' + "Sentry" + '\n');
                     }
 
                     else{
@@ -403,7 +405,7 @@ public slots:
 
                         ss << left << qSetFieldWidth(50) << hashFile.fileName()/*QFileInfo(hashFile).fileName()*/ << "FAIL" << qSetFieldWidth(0) << endl;
                         test.prepend((s));
-                         checkoutput.prepend(QFileInfo(hashFile).fileName() + '\t' + "FAIL" + '\n');
+                         checkoutput.prepend(hashFile.fileName() + '\t'  + hash + '\t' + "FAIL" + '\n');
                     }
 
                     counter++; //ProgressBar
@@ -455,6 +457,7 @@ public slots:
                 if(fileBuffer.indexOf(sentryBuffer.at(i)) == -1)
                {
                    ss << left << qSetFieldWidth(50) << sentryBuffer.at(i) << "MISSING" << qSetFieldWidth(0) << endl;
+                   checkoutput.prepend(sentryBuffer.at(i) + '\t'  + hash + '\t' + "MISSING" + '\n');
                    //test.prepend(s);
                 }
                 counter++;

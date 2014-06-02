@@ -78,12 +78,12 @@ MainWindow::MainWindow(QWidget *parent) :
     //TABLE FUNZ
     QShortcut *shortcut = new QShortcut(QKeySequence("Ctrl+C"), this);
     connect(shortcut,SIGNAL(activated()),this,SLOT(on_actionCopy_triggered()));
-    ui->tableWidget->setColumnCount(3);
+//    ui->tableWidget->setColumnCount(3);
 //    ui->tableWidget->setRowCount(100);
 
-    ui->tableWidget->setHorizontalHeaderLabels(QStringList() << "File" << "Hash" << "Check");
-    ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
-    ui->tableWidget->horizontalHeader()->setSectionResizeMode(1,QHeaderView::Stretch);
+//    ui->tableWidget->setHorizontalHeaderLabels(QStringList() << "File" << "Hash" << "Check");
+//    ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
+//    ui->tableWidget->horizontalHeader()->setSectionResizeMode(1,QHeaderView::Stretch);
 }
 
 MainWindow::~MainWindow()
@@ -171,6 +171,7 @@ void MainWindow::scanCompleted()
 
     ui->tableWidget->setRowCount(numfiles);
     ui->tableWidget->setColumnCount(2);
+    ui->tableWidget->setHorizontalHeaderLabels(QStringList() << "File" << "Hash");
 
 
     QStringList rows = text.split('\n');
@@ -203,16 +204,18 @@ void MainWindow::checkCompleted(){
 
 
     ui->tableWidget->setRowCount(numfiles);
-    ui->tableWidget->setColumnCount(2);
-    ui->tableWidget->setHorizontalHeaderLabels(QStringList() << "Files" << "Check");
+    ui->tableWidget->setColumnCount(3);
+    ui->tableWidget->setHorizontalHeaderLabels(QStringList() << "File" << "Hash" << "Check");
+
 
 
     QStringList rows = updater->checkoutput.split('\n');
     qDebug() << rows;
 
+    if(updater->checkoutput != "")
     for(int i=0; i<numfiles; i++){
         QStringList columns = rows[i].split('\t');
-        for(int j=0; j<2; j++){
+        for(int j=0; j<3; j++){
             ui->tableWidget->setItem(i,j,new QTableWidgetItem(columns[j]));
         }
     }
