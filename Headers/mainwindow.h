@@ -97,7 +97,7 @@ signals:
     void userSelect(QString);
     void selectDir(QString);
     void hidebar();
-    void getfileTotal();
+    void getfileTotal(QString);
 
 private:
     Ui::MainWindow *ui;

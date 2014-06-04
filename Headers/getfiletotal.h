@@ -29,7 +29,7 @@ public slots:
         dirSelect = dir;
     }
 
-    void getfileTotal(){
+    void getfileTotal(QString dirSelect){
 
         emit disableScan(); //Disable Scan button until directory scanned
 

@@ -52,9 +52,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Get number of files in directory for progress bar
     //connect(this,SIGNAL(getfileTotal()),updater,SLOT(getfileTotal()));
-    connect(this,SIGNAL(getfileTotal()),fileTotal,SLOT(getfileTotal()));        //request from main thread
+    connect(this,SIGNAL(getfileTotal(QString)),fileTotal,SLOT(getfileTotal(QString)));        //request from main thread
     connect(fileTotal,SIGNAL(finished(int)),updater,SLOT(getfileTotal(int)));   //transfer total from getfiletotal object to worker object
-    connect(updater,SIGNAL(getfileTotal()),fileTotal,SLOT(getfileTotal()));     //request from updater
+    connect(updater,SIGNAL(getfileTotal(QString)),fileTotal,SLOT(getfileTotal(QString)));     //request from updater
     connect(updater,SIGNAL(displayFileTotal(int)),this,SLOT(displayFileTotal(int)));
 
     connect(fileTotal,SIGNAL(finished(int)),this,SLOT(enableButton()));
@@ -70,7 +70,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this,SIGNAL(hidebar()),bar,SLOT(hide()));
 
     //fileTotal->getfileTotal();
-    emit getfileTotal();
+    emit getfileTotal(dirSelect);
     ui->pushButton->setEnabled(false);
 
 
@@ -203,6 +203,7 @@ void MainWindow::checkCompleted(){
     text = updater->result2;
     ui->textBrowser->setText(QString(text));
 
+    numfiles = updater->numfiles;    //grab number of files from sentry file
 
     ui->tableWidget->setRowCount(numfiles);
     ui->tableWidget->setColumnCount(3);
@@ -220,7 +221,10 @@ void MainWindow::checkCompleted(){
             ui->tableWidget->setItem(i,j,new QTableWidgetItem(columns[j]));
         }
     }
-    ui->tableWidget->resizeColumnsToContents();
+    //ui->tableWidget->resizeColumnsToContents();
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(0,QHeaderView::Stretch);
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(1,QHeaderView::Stretch);
+
     ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
     updater->checkoutput.clear();
 
@@ -236,7 +240,7 @@ void MainWindow::on_actionSet_Directory_triggered()
     ui->pushButton->setEnabled(false);
     dirSelect = QFileDialog::getExistingDirectory(this);
     emit selectDir(dirSelect);
-    emit getfileTotal();
+    emit getfileTotal(dirSelect);
     qDebug() << dirSelect << endl;
 }
 
@@ -283,8 +287,13 @@ void MainWindow::on_actionCopy_triggered()
         for(int j=0; j<range.columnCount();j++){
             if(j>0)
                 str+= "\t";
+            if(j==1 && range.columnCount() == 3){
+                ss << left << qSetFieldWidth(35) << ui->tableWidget->item(range.topRow()+i,range.leftColumn()+j)->text();
+                str+=ui->tableWidget->item(range.topRow()+i,range.leftColumn()+j)->text();
+            }
+            else{
             ss << left << qSetFieldWidth(55) << ui->tableWidget->item(range.topRow()+i,range.leftColumn()+j)->text() << qSetFieldWidth(0);
-            str+=ui->tableWidget->item(range.topRow()+i,range.leftColumn()+j)->text();
+            str+=ui->tableWidget->item(range.topRow()+i,range.leftColumn()+j)->text();}
         }
         ss << endl;
     }

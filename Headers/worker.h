@@ -58,7 +58,7 @@ signals:
     void req();
     void Finished(QString);
     void percentChanged(int);
-    void getfileTotal();
+    void getfileTotal(QString);
     void displayFileTotal(int); //update status bar
 //    void finishedCheck();
 //    void finishedSave();
@@ -189,7 +189,7 @@ public slots:
 
         int position;
         int counter = 0;
-        emit getfileTotal();
+        emit getfileTotal(dirSelect);
         int totalwork = hashes.size() + numfiles;
 
         QDir dir = dirSelect;
@@ -355,7 +355,7 @@ public slots:
 
             //QDir dir = QDir::currentPath();
             QDir dir = dirSelect;
-            emit getfileTotal();
+            emit getfileTotal(dirSelect);
 
             QDirIterator dirIt(dir.absolutePath(), QDir::Files, QDirIterator::Subdirectories);
               while(dirIt.hasNext())
