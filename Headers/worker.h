@@ -238,12 +238,15 @@ public slots:
         }
             qDebug() << endl << endl;
 
+
+
         for(int i=1; i<hashes.size();i+=2)
         {
-            qDebug() << hashes[i];
+            qDebug() << "MISSING File: " << hashes[i];
+            qDebug() << "MISSING Hash: " << hashes[i-1];
             if(buffer.indexOf(hashes[i]) == -1){
                 ss << left << qSetFieldWidth(50) << hashes[i]/*QFileInfo(hashFile).fileName()*/ << "MISSING" << qSetFieldWidth(0) << endl;
-                checkoutput.prepend(hashes[i] + '\t'  + hash[i-1] + '\t' + "MISSING" + '\n');
+                checkoutput.prepend(hashes[i] + '\t'  + " "/*hashes[i-1]*/ + '\t' + "MISSING" + '\n');
 
                 output.prepend(s);
                 s.clear();

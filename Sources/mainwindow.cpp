@@ -212,7 +212,7 @@ void MainWindow::checkCompleted(){
 
 
     QStringList rows = updater->checkoutput.split('\n');
-    qDebug() << rows;
+
 
     if(updater->checkoutput != "")
     for(int i=0; i<numfiles; i++){
